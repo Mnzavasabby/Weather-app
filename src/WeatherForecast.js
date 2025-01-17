@@ -18,6 +18,26 @@ const [weather,setWeather]=useState({
             alert("provide the city")
             return
         }
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+        .then(response=>{
+            if(!response.ok){
+                throw new Error()
+            }
+            return response.json()
+        })
+        .then(result=>{
+            setWeather({
+                icon:`https://openweathermap.org/img/wn/${result.weather[0].icon}.png`,
+                city:result.name,
+                temp:(result.main.temp-273.15).toFixed(1),
+                humidity:result.main.humidity,
+                speed:result.wind.speed
+            })
+            
+        })
+        .catch(()=>{
+            alert("city not found")
+        })
     }
 
     return(
